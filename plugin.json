@@ -2,5 +2,6 @@
     "name": "build-info",
     "description": "Generates a blob of JSON with some basic build information",
     "author": "@roblugton",
-    "public": true
+    "public": true,
+    "requirements": [ "git", "jq" ]
 }
