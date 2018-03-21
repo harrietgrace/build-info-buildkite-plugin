@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+DATE_FORMAT='+%FT%T%z'
+gitLog () {
+  echo `git log -1 --pretty=format:"$1"`
+}
+gitBranch () {
+  echo `git rev-parse --abbrev-ref HEAD`
+}
+currentDate () {
+  echo `date $DATE_FORMAT`
+}
+parseDate () {
+  # echo "\$1: $1"
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    echo `date -jf %s $1 $DATE_FORMAT`
+  else
+    echo `date -d @$1 $DATE_FORMAT`
+  fi
+}
+OUTPUT=$(jq -n \
+  --arg gitSubject "`gitLog %s`" \
+  --arg gitBody "`gitLog %b`" \
+  --arg gitShortHash "`gitLog %h`" \
+  --arg gitHash "`gitLog %H`" \
+  --arg gitAuthorTime "`parseDate $(gitLog %at)`" \
+  --arg gitAuthorName "`gitLog %an`" \
+  --arg gitAuthorEmail "`gitLog %ae`" \
+  --arg gitBranch "`gitBranch`" \
+  --arg buildVersion "$BUILDKITE_BUILD_NUMBER" \
+  --arg buildArtifact "$BUILDKITE_PIPELINE_SLUG" \
+  --arg buildName "$BUILDKITE_PIPELINE_SLUG" \
+  --arg buildGroup "$BUILDKITE_PLUGIN_BUILD_INFO_BUILD_GROUP" \
+  --arg buildTime "`currentDate`" \
+'{
+  git: {
+    commit: {
+      message: {
+        full: $gitBody,
+        short: $gitSubject
+      },
+      time: $gitAuthorTime,
+      id: $gitHash,
+      "id.abbrev": $gitShortHash,
+      user: {
+        name: $gitAuthorName,
+        email: $gitAuthorEmail
+      }
+    },
+    branch: $gitBranch
+  },
+  build: {
+    version: $buildVersion,
+    artifact: $buildArtifact,
+    name: $buildName,
+    group: $buildGroup,
+    time: $buildTime
+  }
+}' 
+)
+echo "~~~ :json: OUTPUT:
+$OUTPUT"
+
+echo $OUTPUT | tee $BUILDKITE_PLUGIN_BUILD_INFO_OUTPUT_FILE
