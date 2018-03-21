@@ -20,7 +20,7 @@ parseDate () {
     echo `date -d @$1 $DATE_FORMAT`
   fi
 }
-OUTPUT=jq -n \
+OUTPUT=$(jq -n \
   --arg gitSubject "`gitLog %s`" \
   --arg gitBody "`gitLog %b`" \
   --arg gitShortHash "`gitLog %h`" \
@@ -59,6 +59,7 @@ OUTPUT=jq -n \
     time: $buildTime
   }
 }' 
+)
 echo "OUTPUT: $OUTPUT"
 
 echo $OUTPUT > $BUILDKITE_PLUGIN_BUILD_INFO_OUTPUT_FILE
