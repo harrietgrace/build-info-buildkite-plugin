@@ -2,6 +2,13 @@
 
 set -euo pipefail
 
+OUTPUT_DIR=${BUILDKITE_PLUGIN_BUILD_INFO_OUTPUT_DIR:-'dist'}
+OUTPUT_FILE=${BUILDKITE_PLUGIN_BUILD_INFO_OUTPUT_FILE:-'build-info.json'}
+OUTPUT_PATH=${OUTPUT_DIR}/${OUTPUT_FILE}
+
+BUILD_GROUP=${BUILDKITE_PLUGIN_BUILD_INFO_BUILD_GROUP:-''}
+
+
 DATE_FORMAT='+%FT%T%z'
 gitLog () {
   echo `git log -1 --pretty=format:"$1"`
@@ -32,7 +39,7 @@ OUTPUT=$(jq -n \
   --arg buildVersion "$BUILDKITE_BUILD_NUMBER" \
   --arg buildArtifact "$BUILDKITE_PIPELINE_SLUG" \
   --arg buildName "$BUILDKITE_PIPELINE_SLUG" \
-  --arg buildGroup "$BUILDKITE_PLUGIN_BUILD_INFO_BUILD_GROUP" \
+  --arg buildGroup "$BUILD_GROUP" \
   --arg buildTime "`currentDate`" \
 '{
   git: {
@@ -62,4 +69,4 @@ OUTPUT=$(jq -n \
 )
 echo "OUTPUT: $OUTPUT"
 
-echo $OUTPUT > $BUILDKITE_PLUGIN_BUILD_INFO_OUTPUT_FILE
+echo $OUTPUT > $OUTPUT_PATH

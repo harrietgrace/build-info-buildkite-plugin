@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
 
+OUTPUT_DIR=${BUILDKITE_PLUGIN_BUILD_INFO_OUTPUT_DIR:-dist}
+
 echo "~~~ :folder: creating dist directory" 
-mkdir dist
+mkdir $OUTPUT_DIR
