@@ -2,8 +2,11 @@
 
 set -euo pipefail
 
+GIT_ID=beta
+DOCKERFILE_PATH=/var/lib/buildkite-agent/plugins/github-com-irexchange-build-info-buildkite-plugin-${GIT_ID}/hooks/post-command
+
 echo "~~~ :docker: building container"
-docker build -t build_info_generator .
+docker build -t build_info_generator ${DOCKERFILE_PATH}
 
 echo "~~~ :docker: running build_info_generator"
 docker run \
