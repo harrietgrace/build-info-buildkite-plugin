@@ -32,7 +32,7 @@ OUTPUT=jq -n \
   --arg buildVersion "$BUILDKITE_BUILD_NUMBER" \
   --arg buildArtifact "$BUILDKITE_PIPELINE_SLUG" \
   --arg buildName "$BUILDKITE_PIPELINE_SLUG" \
-  --arg buildGroup "$BUILDKITE_PLUGIN_BUILDINFO_BUILD_GROUP" \
+  --arg buildGroup "$BUILDKITE_PLUGIN_BUILD_INFO_BUILD_GROUP" \
   --arg buildTime "`currentDate`" \
 '{
   git: {
@@ -61,4 +61,4 @@ OUTPUT=jq -n \
 }' 
 echo "OUTPUT: $OUTPUT"
 
-echo $OUTPUT > $BUILDKITE_PLUGIN_BUILDINFO_OUTPUT_FILE
+echo $OUTPUT > $BUILDKITE_PLUGIN_BUILD_INFO_OUTPUT_FILE
