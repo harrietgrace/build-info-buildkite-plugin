@@ -60,6 +60,8 @@ OUTPUT=$(jq -n \
   }
 }' 
 )
-echo "OUTPUT: $OUTPUT"
+echo "~~~  :json: OUTPUT: $OUTPUT"
 
-echo $OUTPUT > $BUILDKITE_PLUGIN_BUILD_INFO_OUTPUT_FILE
+ls -alR
+
+echo $OUTPUT | tee $BUILDKITE_PLUGIN_BUILD_INFO_OUTPUT_FILE
