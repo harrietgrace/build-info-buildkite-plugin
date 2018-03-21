@@ -10,7 +10,7 @@ steps:
     - label: foo
       command: ./scripts/dostuff.sh
       plugins:
-        irexchange/build-info#v0.0.1:
+        irexchange/build-info#v0.0.3:
             output_file: dist/build-info.json
             build_group: com.irexchange
 ```
