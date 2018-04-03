@@ -3,4 +3,4 @@
 OUTPUT_DIR=${BUILDKITE_PLUGIN_BUILD_INFO_OUTPUT_DIR:-dist}
 
 echo "~~~ :file_folder: creating $OUTPUT_DIR directory" 
-mkdir $OUTPUT_DIR
+mkdir -p $OUTPUT_DIR
